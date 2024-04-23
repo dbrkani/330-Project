@@ -1,22 +1,29 @@
 public class Player {
     private String name;
     private int chips;
+    private int bet;
 
     public Player(String name) {
         this.name = name;
         this.chips = 1000;
+        this.bet = 0;
     }
 
     public void addChips(int amount) {
         chips += amount;
     }
 
-    public int bet(int amount) {
-      if (chips > amount)
+    public void bet(int amount) {
+      if (chips > amount){
       chips -= amount;
+        bet = amount;
+        }
       else
         amount = 0;
-      return amount;
+    }
+
+    public int getBet(){
+      return bet;
     }
 
     public int getChips() {

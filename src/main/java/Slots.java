@@ -6,14 +6,13 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Collections;
 
-public class Slots {
+public class Slots implements Game {
 
 //Dashi: Reels hold the columns of icons, payouts give the multiplier. Lists of lists must be explicitly declared.
   private List<List<String>> reels;
   private Map<String, Integer> payouts;
   private int currentBet;
   private Player activePlayer;
-
 
 //Dashi: constructor generates a random set of reels each time
   public Slots(Player playerOne) {
@@ -25,7 +24,7 @@ public class Slots {
 
   private List<List<String>> generateReels() {
 //Dashi: basic five icons in every reel
-    String[] icons = { "cherry", "lemon", "bell", "bar", "seven" };
+    String[] icons = { "🍒", "🍋", "🔔", "🐶", "7️⃣" };
 //Dashi: seed reel for randomization
     List<String> singleReel = Arrays.asList(icons);
 //Dashi: holds randomized reels
@@ -39,25 +38,31 @@ public class Slots {
     return reels;
   }
 
-
 //Dashi: map used to streamline payouts
   private Map<String, Integer> givePayOut() {
     Map<String, Integer> PayOut = new HashMap<String, Integer>();
-    PayOut.put("cherry", 100);
-    PayOut.put("lemon", 200);
-    PayOut.put("bell", 500);
-    PayOut.put("bar", 750);
-    PayOut.put("seven", 1000);
+    PayOut.put("🍒", 100);
+    PayOut.put("🍋", 200);
+    PayOut.put("🔔", 500);
+    PayOut.put("🐶", 750);
+    PayOut.put("7️⃣", 1000);
     return PayOut;
   }
 
-//Dashi: adjust bets before playing  
+
+//Dashi: TODO: implement throws and catches
+  @Override
   public void placeBet(int bet) {
-    System.out.println("bet is "+ bet);
 //Dashi: Ensure that the player isnt betting negatively
-    if (bet+this.currentBet>=0)
-    this.currentBet += bet;
+    if (bet > 0 && bet <= activePlayer.getChips()) {
+      activePlayer.bet(bet);
+      this.currentBet = bet;
+      System.out.println("Bet placed: " + bet);
+    } else {
+      System.out.println("ya need 💲💲💲 to play");
+    }
   }
+
 //Dashi: reset bet after a spin
   public void resetBet() {
     this.currentBet = 0;
@@ -69,7 +74,7 @@ public class Slots {
     List<String> result = new ArrayList<String>();
     for (List<String> reel : reels) {
       String res = reel.get(random.nextInt(reel.size()));
-      System.out.print(res + " ");
+      System.out.print(res + "  ");
       result.add(res);
     }
     System.out.println();
@@ -77,26 +82,25 @@ public class Slots {
 
   }
 
-  public void play(Player playerOne, int bet) {
-
-//Dashi: Player places bet
-//Dashi: GOAL: allow player to adjust bet before starting the slots. this is fine for now.
-    this.placeBet(bet);
 
 
-//Dashi: logic to determine a win. could be its own method. would need to tweak if we wanted to include diagonal matches
+  @Override
+  public void play() {
+
+    //Dashi: logic to determine a win. could be its own method. would need to tweak
+    // if we wanted to include diagonal matches
     List<String> outcome = spinReels();
     Integer payoutMulti = 0;
-//Dashi: check if theres a match. Looks terrible and can probably be refactored
+    //Dashi: check if theres a match. Looks terrible and can probably be refactored
 
     if (outcome.get(0).equals(outcome.get(1)) && outcome.get(0).equals(outcome.get(2))) {
       payoutMulti = payouts.get(outcome.get(1));
-      System.out.println(playerOne.getName()+" won " + payoutMulti * currentBet + " chips");
+      System.out.println(activePlayer.getName() + " won " + payoutMulti * currentBet + " chips");
     } else {
-      System.out.println("L, you lost "+bet+" chips");
+      System.out.println("L, you lost " + currentBet + " chips");
     }
 
-    playerOne.addChips(payoutMulti*currentBet);
+    activePlayer.addChips(payoutMulti * currentBet);
     resetBet();
   }
 

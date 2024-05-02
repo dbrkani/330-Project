@@ -7,11 +7,11 @@ public class Card {
         this.suit = suit;
         this.rank = rank;
         if(Character.isDigit(rank.charAt(0)))
-          this.value = Integer.parseInt(rank);
+            this.value = Integer.parseInt(rank);
         else if (this.rank.equals("Ace"))
-          this.value = 11;
+            this.value = 11;
         else
-          this.value = 10;
+            this.value = 10;
 
     }
 
@@ -23,8 +23,12 @@ public class Card {
         return rank;
     }
 
+    public void setVal(int val){
+        value = val;
+    }
+
     public int getVal(){
-      return value;
+        return value;
     }
 
     public String toString() {

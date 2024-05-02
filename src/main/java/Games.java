@@ -1,10 +1,12 @@
+import java.util.ArrayList;
+
 public abstract class Games implements Game {
 
-  protected Player activePlayer;
+    protected ArrayList<Player> players;
 
-    public Games (Player playerOne){
-      this.activePlayer = playerOne;
+    public Games (ArrayList<Player> players){
+        this.players = players;
     }
 
-  public abstract void play();
+    public abstract void play();
 }

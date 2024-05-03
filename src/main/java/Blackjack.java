@@ -1,49 +1,39 @@
 import java.util.*;
-
 public class Blackjack extends Games {
-    private Deck deck;
-    private Map<String, ArrayList<Integer>> bets;
-    private Map<String, ArrayList<ArrayList<Card>>> hands;
-    private int initialBet;
-    private int currentBet;
-    private Scanner scanner;
+    private final Deck deck;
+    private final Map<Integer, ArrayList<ArrayList<Card>>> hands;
+    private final Scanner scanner;
+    private final ArrayList<Card> dealerHand;
 
     public Blackjack(ArrayList<Player> players) {
         super(players);
         this.deck = new Deck();
-        this.hands = new HashMap<String, ArrayList<ArrayList<Card>>>();
-        this.bets = new HashMap<String, ArrayList<Integer>>();
+        this.hands = new HashMap<>();
         this.scanner = new Scanner(System.in);
+        this.dealerHand = new ArrayList<>();
     }
 
     public void dealInitialCards() {
-        ArrayList<Card> dealerHand = new ArrayList<Card>();
         for (Player player : players) {
-            ArrayList<Card> hand = new ArrayList<Card>();
+            ArrayList<Card> hand = new ArrayList<>();
             hand.add(deck.dealCard());
             hand.add(deck.dealCard());
-            ArrayList<ArrayList<Card>> handContainer = new ArrayList<ArrayList<Card>>();
+            ArrayList<ArrayList<Card>> handContainer = new ArrayList<>();
             handContainer.add(hand);
-            hands.put(player.getName(), handContainer);
+            hands.put(player.getID(), handContainer);
         }
         dealerHand.add(deck.dealCard());
         dealerHand.add(deck.dealCard());
-        ArrayList<ArrayList<Card>> container = new ArrayList<>();
-        container.add(dealerHand);
-        hands.put("Dealer", container);
+
     }
 
 
     public Card doubleDown(List<Card> currentHand, Player player) {
 
-        int handIndex = hands.get(player.getName()).indexOf(currentHand);
-        ArrayList<Integer> allBets = bets.get(player.getName());
-        int bet = allBets.get(handIndex);
-        int newBet = player.placeBet(bet);
-        bet = bet * 2;
-        if (currentHand.size() == 2 && newBet != 0) {
-            allBets.set(handIndex, bet);
-            bets.put(player.getName(), allBets);
+        int handIndex = hands.get(player.getID()).indexOf(currentHand);
+        int bet = player.getBet(handIndex);
+        boolean placeBet= player.placeBet(handIndex,bet);
+        if (currentHand.size() == 2 && placeBet) {
             Card hitCard =deck.dealCard();
             currentHand.add(hitCard);
             return hitCard;
@@ -54,13 +44,12 @@ public class Blackjack extends Games {
     }
 
     public int[] split(List<Card> currentHand, Player player) {
-        int handIndex = hands.get(player.getName()).indexOf(currentHand);
-        ArrayList<Integer> allBets = bets.get(player.getName());
-        int bet = allBets.get(handIndex);
-        int newBet = player.placeBet(bet);
+        int handIndex = hands.get(player.getID()).indexOf(currentHand);
+        int bet = player.getBet(handIndex);
+        boolean newBet = player.placeBet(bet);
 
-        if (currentHand.size() == 2 && currentHand.get(0).getRank().equals(currentHand.get(1).getRank()) && newBet != 0) {
-            ArrayList<Card> splitHand = new ArrayList<Card>();
+        if (currentHand.size() == 2 && currentHand.get(0).getRank().equals(currentHand.get(1).getRank()) && newBet) {
+            ArrayList<Card> splitHand = new ArrayList<>();
             Card card = currentHand.remove(1);
             int cardValue = card.getVal();
             int cardSuit = (cardValue==11?1:0);
@@ -68,8 +57,7 @@ public class Blackjack extends Games {
             splitHand.add(card);
             currentHand.add(deck.dealCard());
             splitHand.add(deck.dealCard());
-            hands.get(player.getName()).add(splitHand);
-            allBets.set(handIndex + 1, newBet);
+            hands.get(player.getID()).add(splitHand);
             System.out.println("Hands split. Additional bet placed.");
             return cardVal;
         } else {
@@ -80,10 +68,10 @@ public class Blackjack extends Games {
 
     public void printHand(List<Card> hand) {
         for (Card card : hand) {
-            if (card.equals(hand.get(hand.size() - 1)))
-                System.out.println(card.toString());
+            if (card.equals(hand.get(hand.size()-1)))
+                System.out.println(card);
             else
-                System.out.print(card.toString() + ", ");
+                System.out.print(card+ ", ");
         }
     }
 
@@ -101,7 +89,7 @@ public class Blackjack extends Games {
     }
 
     public int dealerPlay() {
-        List<Card> dealerHand = hands.get("Dealer").get(0);
+        dealerHand.get(0);
         int value = 0;
         int aceCount = 0;
 
@@ -135,14 +123,13 @@ public class Blackjack extends Games {
         for (Player player : players) {
             ArrayList<Integer> playerVals = endValues.get(player);
             for (Integer value : playerVals) {
-                if (value > dealerValue && value < 22 || value<=21 && dealerValue>21) {
+                int valueIndex = playerVals.indexOf(value);
+                int bet = player.getBet(valueIndex);
+                if (value > dealerValue && value < 22||value<22 && dealerValue>21) {
                     System.out.println(player.getName()+" wins with " + value + " against dealer's " + dealerValue);
-                    int bet = bets.get(player.getName()).get(playerVals.indexOf(value));
                     player.addChips(bet*2);
-
                 } else if(value==dealerValue && value < 22){
                     System.out.println(player.getName()+" breaks even with dealer at " + dealerValue);
-                    int bet = bets.get(player.getName()).get(playerVals.indexOf(value));
                     player.addChips(bet);
                 }
 
@@ -150,25 +137,25 @@ public class Blackjack extends Games {
                     System.out.println("Dealer wins with " + dealerValue + " against "+player.getName()+"'s " + value);
 
             }
+                player.resetBets();
         }
 
         }
+        dealerHand.clear();
     }
 
     public void play() {
         HashMap<Player,ArrayList<Integer>> endValues = new HashMap<>();
         for (Player player : players) {
-            ArrayList<Integer> betList = new ArrayList<Integer>();
-            betList.add(player.placeBet());
-            bets.put(player.getName(), betList);
+            player.placeBet();
         }
         dealInitialCards();
-        System.out.println("Dealer showing a " + hands.get("Dealer").get(0).get(0));
+        System.out.println("Dealer showing a " + dealerHand.get(0));
 
         for (Player player : players) {
             ArrayList<Integer> handVal= new ArrayList<>();
             // Get hands for the active player
-            ArrayList<ArrayList<Card>> playerHands = hands.get(player.getName());
+            ArrayList<ArrayList<Card>> playerHands = hands.get(player.getID());
             for (ArrayList<Card> hand : playerHands) {
                 int value = 0;
                 int aceCount = 0;
@@ -205,7 +192,7 @@ public class Blackjack extends Games {
                                     break;
                                 case 2: {
                                     printHand(hand);
-                                    System.out.println("Standing at: " + value+"\n");
+                                    System.out.println("Standing at: " + value);
                                     handVal.add(value);
                                     break loop;
                                 }
@@ -215,7 +202,7 @@ public class Blackjack extends Games {
                                         int[] doubleResult = getValue(doubleDownCard,value, aceCount);
                                         value = doubleResult[0];
                                         printHand(hand);
-                                        System.out.println("Doubled Down at: " + value+"\n");
+                                        System.out.println("Doubled Down for a total of: " + value);
                                         handVal.add(value);
                                         break loop;
                                     }
@@ -223,8 +210,10 @@ public class Blackjack extends Games {
                                 case 4:{
                                     // Split the hand
                                     int[] splitResult = split(hand, player);
-                                    value -= splitResult[0];
-                                    aceCount -= splitResult[1];
+                                    if (splitResult!=null){
+                                        value -= splitResult[0];
+                                        aceCount -= splitResult[1];
+                                    }
                                     break;
                                 }
                                 default:
@@ -232,16 +221,16 @@ public class Blackjack extends Games {
                                     break;
                             }
                         } catch (Exception e) {
-                            System.out.println("Invalid input, please enter a valid number.");
-                            scanner.nextInt(); // this handles the invalid input
+                            System.out.println(e.getMessage());
+                            scanner.next(); // this handles the invalid input
                         }
                     } else if (value == 21) {
-                        System.out.println("Blackjack!\n");
+                        System.out.println("Blackjack!");
                         handVal.add(value);
                         break;
                     } else {
                         if (aceCount==0) {
-                            System.out.println("Bust!\n1");
+                            System.out.println("Bust!");
                             handVal.add(value);
                         }
                             break;
@@ -256,7 +245,7 @@ public class Blackjack extends Games {
 
 
 
-};
+}
 
 
 

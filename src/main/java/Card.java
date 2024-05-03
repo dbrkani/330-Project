@@ -6,6 +6,8 @@ public class Card {
     public Card(String rank, String suit) {
         this.suit = suit;
         this.rank = rank;
+
+        // generates card value
         if(Character.isDigit(rank.charAt(0)))
             this.value = Integer.parseInt(rank);
         else if (this.rank.equals("Ace"))

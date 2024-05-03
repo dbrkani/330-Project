@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-
+//TODO: maybe make a little more robust
 public abstract class Games implements Game {
 
     protected ArrayList<Player> players;

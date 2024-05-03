@@ -8,27 +8,26 @@ import java.util.Collections;
 
 public class Slots extends Games implements Game {
 
-    // Dashi: Reels hold the columns of icons, payouts give the multiplier. Lists of
-    // lists must be explicitly declared.
+    // Reels hold the columns of icons, payouts give the multiplier.
     private final List<List<String>> reels;
     private final Map<String, Integer> payouts;
 
-    // Dashi: constructor generates a random set of reels each time
+    // constructor generates a random set of reels each time
     public Slots(ArrayList<Player> players) {
         super(players);
         this.reels = generateReels();
         this.payouts = givePayOut();
     }
-
+//generate the arrays that will hold the icons for each column in the slot machine
     private List<List<String>> generateReels() {
-        // Dashi: basic five icons in every reel
+        // basic five icons in every reel
         String[] icons = { "🍒", "🍋", "🔔", "🐶", "7️⃣" };
-        // Dashi: seed reel for randomization
+        // seed reel for randomization
         List<String> singleReel = Arrays.asList(icons);
-        // Dashi: holds randomized reels
+        // holds randomized reels
         List<List<String>> reels = new ArrayList<>();
 
-        // Dashi: create randomized reels, then add them to the reel container.
+        // create randomized reels, then add them to the reel container.
         for (int i = 0; i < 3; i++) {
             Collections.shuffle(singleReel);
             reels.add(singleReel);
@@ -36,19 +35,20 @@ public class Slots extends Games implements Game {
         return reels;
     }
 
-    // Dashi: map used to streamline payouts
+    // map used to streamline payouts
     private Map<String, Integer> givePayOut() {
         Map<String, Integer> PayOut = new HashMap<>();
-        PayOut.put("🍒", 100);
-        PayOut.put("🍋", 200);
-        PayOut.put("🔔", 500);
-        PayOut.put("🐶", 750);
-        PayOut.put("7️⃣", 1000);
+        PayOut.put("🍒", 2);
+        PayOut.put("🍋", 3);
+        PayOut.put("🔔", 10);
+        PayOut.put("🐶", 50);
+        PayOut.put("7️⃣", 100);
         return PayOut;
     }
 
 
-    // Dashi: logic for a spin. returns 3 random icons.
+    // logic for a spin. returns 3 random icons.
+    //TODO: IRL slots use a formula based on last win and bet placed to determine a winner. could incorporate that
     public List<String> spinReels() {
         Random random = new Random();
         List<String> result = new ArrayList<>();
@@ -63,15 +63,23 @@ public class Slots extends Games implements Game {
     }
 
     @Override
+
     public void play() {
+    //iterate through available players
         for(Player player:players){
+
             boolean currentBet = player.placeBet();
+
+
+            //check if bet was placed. if so spin the wheel and check if user has a match.
+            // might be able to update for betting on multiple lines.
             if (currentBet) {
 
                 List<String> outcome = spinReels();
                 Integer payoutMulti = 0;
 
-                // Dashi: check if there's a match. Looks terrible and can probably be refactored
+                // Check if there's a match, and payout
+                //TODO: incorporate multi-line betting if time permitting.
                 if (outcome.get(0).equals(outcome.get(1)) && outcome.get(0).equals(outcome.get(2))) {
                     payoutMulti = payouts.get(outcome.get(1));
                     System.out.println(player.getName() + " won " + payoutMulti * player.getBet() + " chips");

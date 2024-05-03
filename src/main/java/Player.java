@@ -1,11 +1,22 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
+
+
+//Player holds Player information, including player IDs, names, and bet amounts.
+
 public class Player {
+/*
+Player ID is an atomic integer that increments on every creation of a new player. Using ID allows
+Players to have identical names
+*/
     private static final AtomicInteger count = new AtomicInteger(0);
     private final int  playerID;
     private final String name;
     private int chips;
+/*
+Bets are tracked by the player class in order easily pull and create bets between games.
+ */
     private final ArrayList<Integer> bets;
     private final Scanner scanner;
     public Player(String name) {
@@ -17,24 +28,13 @@ public class Player {
     }
 
 
+/*
+place bet is a conditional that subtracts an amount from players available chips and adds it to the bet pool if available
+returns true if successful.
 
-    public void addChips(int amount) {
-        chips += amount;
-    }
-
-    public int getBet(){
-        return bets.get(0);
-    }
-
-    public ArrayList<Integer> getAllBets(){
-        return bets;
-    }
-
-    public int getBet(int index){
-        return bets.get(index);
-    }
-
-
+Place bet is overloaded twice. Original takes user input for the bet, first overload allows for adding another bet
+to the using the original bet amount, and second overload updates a bet based on ID
+ */
     public boolean placeBet() {
         System.out.print("Player:" +getName()+"\nChips: "+getChips()+"\n\nEnter bet amount: ");
         int amount = scanner.nextInt();
@@ -68,7 +68,7 @@ public class Player {
     }
 
     public boolean placeBet(int index, int amount) {
-        if (chips >= amount) {
+        if (chips >= amount && amount>0) {
             chips -=amount;
             bets.set(index, bets.get(index)+amount);
             System.out.println("Bet updated: " + bets.get(index));
@@ -80,6 +80,24 @@ public class Player {
             return false;
         }
 
+    }
+
+    //getters and setters for bets for player variables.
+
+    public void addChips(int amount) {
+        chips += amount;
+    }
+
+    public int getBet(){
+        return bets.get(0);
+    }
+
+    public ArrayList<Integer> getAllBets(){
+        return bets;
+    }
+
+    public int getBet(int index){
+        return bets.get(index);
     }
     public void resetBets(){
         bets.clear();

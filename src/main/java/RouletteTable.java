@@ -1,12 +1,17 @@
 import java.util.Arrays;
 public class RouletteTable {
+    //TODO: not necessary if using a front end
+    //fun lil colors for the console.
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_RESET = "\u001B[0m";
+    //TODO: not necessary if using a front end
+    //List that holds number colors
     public static final int[] RED_NUMBERS = {1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36};
     public static final int[] BLACK_NUMBERS = {2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35};
 
+    //Enum that holds bet multipliers and payout descriptions.
     public enum BetType {
         SINGLE(36, "Single number bet, Self Explanatory"),
         DOUBLE(18, "Double number bet, Bet on two adjacent numbers. Pick a number and a direction"),
@@ -21,9 +26,10 @@ public class RouletteTable {
         COLOR(2, "Red or black"),
         ODDEVEN(2, "Odd or even bets, pays even money.");
 
+
         private final int payoutMultiplier;
         private final String description;
-
+//constructor for enum
         BetType(int payoutMultiplier, String description) {
             this.payoutMultiplier = payoutMultiplier;
             this.description = description;
@@ -43,6 +49,8 @@ public class RouletteTable {
             System.out.println(bet.name() + ": " + bet.getDescription() + " Payout " + bet.getPayoutMultiplier() + " to 1.");
         }
     }
+    //TODO: hella ugly. replace with GUI or make it look better.
+    //console table
     public static void printRouletteTable() {
         String[] topNumbers = {"0", "00"};
         String[][] numbers = {
@@ -60,12 +68,12 @@ public class RouletteTable {
                 {"34", "35", "36"}
         };
 
-        // Print top section for 0 and 00
+        // Print top section for green colors
         System.out.println("----------------");
         System.out.println("|   "+ANSI_GREEN+"0"+ANSI_RESET+"   |  "+ANSI_GREEN+ "00"+ANSI_RESET+ "  |");
         System.out.println("----------------");
 
-        // Print numbers grid
+        // Print the rest of them
         for (String[] row : numbers) {
             System.out.println("+----+----+----+");
             String number;
@@ -81,7 +89,7 @@ public class RouletteTable {
         }
         System.out.println("+----+----+----+");
 
-        // Print options below numbers
+        // Print bet choices
         System.out.println("|1-18|EVEN| "+ANSI_RED+"RED"+ANSI_RESET+"|"+ANSI_BLACK+"BLACK"+ANSI_RESET+"|ODD |19-36|");
         System.out.println();
 

@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+//creates a deck that generates deals, and holds cards.
 public class Deck {
     private List<Card> cards;
     int numDecks;
@@ -12,7 +12,7 @@ public class Deck {
         initializeDeck();
         shuffle();
     }
-
+//different games use different numbers of decks. number of decks parameter is good future proofing for new games
     public Deck(int numDecks) {
         this.cards = new ArrayList<Card>();
         this.numDecks = numDecks;
@@ -24,14 +24,17 @@ public class Deck {
     private void initializeDeck() {
         String[] suits = { "♥", "♦", "♣", "♠" };
         String[] ranks = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace" };
-
+//for each suit
         for (String suit : suits) {
+            //insert one rank
             for (String rank : ranks) {
                 this.cards.add(new Card(rank, suit));
             }
         }
     }
 
+ //TODO: shuffle should be refactored and incorporated into dealcard
+// reinitialize deck if
     public void shuffle() {
         if(cards.size() < (numDecks*52*.3)){
             cards.clear();
@@ -43,9 +46,9 @@ public class Deck {
     }
 
 
-
+    // remove the first card in a deck, then return it
     public Card dealCard() {
-        if (!this.cards.isEmpty()) {
+        if (this.cards.isEmpty()) {
             return this.cards.remove(0);
         }
         return null;

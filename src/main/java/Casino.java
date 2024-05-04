@@ -5,11 +5,13 @@ public class Casino {
     private ArrayList<Player> players;
     private Game currentGame;
     private Scanner scanner;
-
+//casino initializes starting players, and handles which game to play.
     public Casino() {
         this.scanner = new Scanner(System.in);
         this.players = new ArrayList<Player>();
         System.out.println("Enter player names:");
+//TODO: change to do-while
+        //gets each users name, adds them to player list
         String userIn = scanner.nextLine();
         while(!userIn.equals("exit")&&!userIn.equals("")) {
 
@@ -23,7 +25,7 @@ public class Casino {
 
 
     public void chooseGame() {
-        // Dashi: keep the program running while you still want to play
+        // Keep the program running while you still want to play
         boolean menu = true;
         while (menu) {
             for(Player player :players){
@@ -55,7 +57,7 @@ public class Casino {
             game.play();
             System.out.println("Continue?");
             String response = scanner.next();
-            // Dashi: this is garbage. need to make a better way
+            // TODO: this is garbage. need to make a better way
             if (response.equals("no")) {
                 keepPlaying = false;
                 System.out.println("Exiting");

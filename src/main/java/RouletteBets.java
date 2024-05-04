@@ -1,7 +1,9 @@
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
-
+/* utility class to manage bet validity and bet payout. those must be separate due to user placing multiple bets
+before wheel is spun
+ */
 public final class RouletteBets {
     private final ArrayList<RouletteNum> numbers = new ArrayList<>();
 
@@ -9,8 +11,7 @@ public final class RouletteBets {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
-    private static Scanner scanner = new Scanner(System.in);
-
+//validity for bets where user has to pick a number
     public static boolean singleValid(RouletteNum betNum) {
         return betNum.getNum() >= 0 && betNum.getNum() <= 37;
     }
@@ -30,7 +31,7 @@ public final class RouletteBets {
     public static boolean dozenValid(RouletteNum betNum) {
         return betNum.getNum() == 1 || betNum.getNum() == 13 || betNum.getNum() == 25;
     }
-
+//assigning a valid integer to return for non number bets. probably irrelevant but good to be safe during testing.
     public static int handleOpenBets(int betPlaced) {
 
         int result = switch (betPlaced) {
@@ -42,7 +43,7 @@ public final class RouletteBets {
         return result;
     }
 
-
+//switch case for checking valid bets. cases determined by user input and bet list.
     public static boolean validBets(int betPlaced, ArrayList<RouletteNum> betNums) {
         boolean result = switch (betPlaced) {
             case 1 -> singleValid(betNums.getFirst());
@@ -56,6 +57,9 @@ public final class RouletteBets {
 
     }
 
+    //TODO: most of these can be an inline return, but easier readability this way.
+
+    //return winner payout multiplier, set to 0 if loss
     public static int calcWinner(RouletteNum num, ArrayList<RouletteNum> betNums, int betPlaced) {
         int result= switch (betPlaced) {
             //single

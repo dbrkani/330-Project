@@ -3,11 +3,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class Gui {
+    private JPanel panel = new JPanel();
+    private JFrame frame = new JFrame();
 
     public void createInitialWindow() {
 
-
-        JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 1000, 5));
 
         JTextArea playerSelect = new JTextArea();
@@ -29,7 +29,7 @@ public class Gui {
         players4.addActionListener(this::actionPerformed);
         panel.add(players4);
 
-        JFrame frame = new JFrame();
+
         frame.setSize(500, 250);
         frame.setTitle("Casino Simulation");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -59,7 +59,8 @@ public class Gui {
     }
 
     private void setPlayerMode(int players){
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 500, 10));
+
+        panel.removeAll();
         JTextArea playerInformation = new JTextArea();
         playerInformation.setEditable(false);
         playerInformation.setText("Enter Player Name(s)");
@@ -96,12 +97,7 @@ public class Gui {
             // TODO: Casino class needs changes for inputs
         });
 
-        JFrame frame = new JFrame();
-        frame.setSize(500, 250);
-        frame.setTitle("Casino Simulation");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
 
         frame.add(panel);
     }

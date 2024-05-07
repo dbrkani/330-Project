@@ -3,8 +3,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class Gui {
-    private JPanel panel = new JPanel();
-    private JFrame frame = new JFrame();
+    private final JPanel panel = new JPanel();
+    private final JFrame frame = new JFrame();
+    private final Button back = new Button("Return to game select");
+    private final Casino casino = new Casino();
 
     public void createInitialWindow() {
 
@@ -33,10 +35,11 @@ public class Gui {
         frame.setSize(500, 250);
         frame.setTitle("Casino Simulation");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
         frame.setLocationRelativeTo(null);
 
+        frame.repaint();
         frame.add(panel);
+        frame.setVisible(true);
 
 
     }
@@ -55,6 +58,21 @@ public class Gui {
             case "4 player":
                 setPlayerMode(4);
                 break;
+            case "Blackjack":
+                startBlackjack();
+                break;
+            case "Roulette":
+                startRoulette();
+                break;
+            case "Slot Machine":
+                startSlots();
+                break;
+            case "Return to game select":
+                gameSelect();
+                break;
+            default:
+                System.out.println("Error occurred with buttons");
+                System.exit(-1);
         }
     }
 
@@ -95,11 +113,64 @@ public class Gui {
         confirm.addActionListener(e -> {
             // TODO: Create new casino here and input player names
             // TODO: Casino class needs changes for inputs
+
+            gameSelect();
         });
 
-        frame.setVisible(true);
+        updateWindow();
+    }
+    private void gameSelect()
+    {
 
+        panel.removeAll();
+        JTextArea select = new JTextArea();
+        select.setText("Please select your game:");
+        select.setEditable(false);
+        select.setVisible(true);
+        panel.add(select);
+        Button Blackjack = new Button("Blackjack");
+        Button Roulette = new Button("Roulette");
+        Button Slots = new Button("Slot Machine");
+        Blackjack.addActionListener(this::actionPerformed);
+        Roulette.addActionListener(this::actionPerformed);
+        Slots.addActionListener(this::actionPerformed);
+
+        panel.add(Blackjack);
+        panel.add(Roulette);
+        panel.add(Slots);
+
+        updateWindow();
+    }
+
+    private void startBlackjack(){
+        panel.removeAll();
+        backButton();
+        updateWindow();
+    }
+
+    private void startRoulette(){
+        panel.removeAll();
+        backButton();
+        updateWindow();
+    }
+
+    private void startSlots(){
+        panel.removeAll();
+        backButton();
+        updateWindow();
+    }
+
+    private void backButton(){
+        back.addActionListener(this::actionPerformed);
+        back.setVisible(true);
+        panel.add(back);
+    }
+
+    private void updateWindow(){
+        frame.repaint();
         frame.add(panel);
+        frame.setVisible(true);
     }
 }
+
 

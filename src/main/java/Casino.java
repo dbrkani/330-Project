@@ -9,17 +9,17 @@ public class Casino {
     public Casino() {
         this.scanner = new Scanner(System.in);
         this.players = new ArrayList<Player>();
-        System.out.println("Enter player names:");
+        //System.out.println("Enter player names:");
 //TODO: change to do-while
         //gets each users name, adds them to player list
-        String userIn = scanner.nextLine();
-        while(!userIn.equals("exit")&&!userIn.equals("")) {
+        //String userIn = scanner.nextLine();
+        /*while(!userIn.equals("exit")&&!userIn.equals("")) {
 
             Player player = new Player(userIn);
             players.add(player);
             userIn=scanner.nextLine();
         }
-
+*/
 
     }
 

@@ -88,7 +88,7 @@ public class Slots extends Games implements Game {
                 }
                 player.addChips(payoutMulti * player.getBet());
             }
-
+        player.resetBets();
         }
     }
 

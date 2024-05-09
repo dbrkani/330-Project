@@ -48,7 +48,7 @@ public class Deck {
 
     // remove the first card in a deck, then return it
     public Card dealCard() {
-        if (this.cards.isEmpty()) {
+        if (!this.cards.isEmpty()) {
             return this.cards.remove(0);
         }
         return null;

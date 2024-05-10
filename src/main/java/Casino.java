@@ -63,7 +63,7 @@ public class Casino {
         while (keepPlaying) {
             game.play();
             System.out.println("Continue?");
-            String response = "no";
+            String response = " ";
 
             if (response.equals("no")) {
                 keepPlaying = false;

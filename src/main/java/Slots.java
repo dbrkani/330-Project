@@ -1,95 +1,74 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Collections;
+import java.util.*;
 
-public class Slots extends Games implements Game {
+public class Slots extends Games {
 
-    // Reels hold the columns of icons, payouts give the multiplier.
     private final List<List<String>> reels;
     private final Map<String, Integer> payouts;
+    private Chips chips;
 
-    // constructor generates a random set of reels each time
     public Slots(ArrayList<Player> players) {
         super(players);
         this.reels = generateReels();
         this.payouts = givePayOut();
+        this.chips = new Chips();
     }
-//generate the arrays that will hold the icons for each column in the slot machine
-    private List<List<String>> generateReels() {
-        // basic five icons in every reel
-        String[] icons = { "🍒", "🍋", "🔔", "🐶", "7️⃣" };
-        // seed reel for randomization
-        List<String> singleReel = Arrays.asList(icons);
-        // holds randomized reels
-        List<List<String>> reels = new ArrayList<>();
 
-        // create randomized reels, then add them to the reel container.
+    private List<List<String>> generateReels() {
+        String[] icons = { "🍒", "🍋", "🔔", "🐶", "7️⃣" };
+        List<String> singleReel = new ArrayList<>(Arrays.asList(icons));
+        List<List<String>> reels = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            Collections.shuffle(singleReel);
-            reels.add(singleReel);
+            Collections.shuffle(singleReel, new Random());
+            reels.add(new ArrayList<>(singleReel));
         }
         return reels;
     }
 
-    // map used to streamline payouts
     private Map<String, Integer> givePayOut() {
-        Map<String, Integer> PayOut = new HashMap<>();
-        PayOut.put("🍒", 2);
-        PayOut.put("🍋", 3);
-        PayOut.put("🔔", 10);
-        PayOut.put("🐶", 50);
-        PayOut.put("7️⃣", 100);
-        return PayOut;
+        Map<String, Integer> payOut = new HashMap<>();
+        payOut.put("🍒", 2);
+        payOut.put("🍋", 3);
+        payOut.put("🔔", 10);
+        payOut.put("🐶", 50);
+        payOut.put("7️⃣", 100);
+        return payOut;
     }
 
+    public void play() {
+        // Show betting interface and allow each player to place their bets
+        for (Player player : players) {
+            chips.placeBet(player);
+        }
 
-    // logic for a spin. returns 3 random icons.
-    //TODO: IRL slots use a formula based on last win and bet placed to determine a winner. could incorporate that
-    public List<String> spinReels() {
+        // Once all bets are placed, spin the reels once for all players
+        List<String> outcome = spinReels();
+        System.out.println("Spin results: " + outcome);
+
+
+        for (Player player : players) {
+            checkPayout(outcome, player);
+        }
+    }
+
+    private void checkPayout(List<String> outcome, Player player) {
+        if (outcome.get(0).equals(outcome.get(1)) && outcome.get(0).equals(outcome.get(2))) {
+            System.out.println(player.getBet(0));
+            int payoutMultiplier = payouts.get(outcome.get(1));
+            int winnings = payoutMultiplier * player.getBet();
+            player.addChips(winnings);
+            System.out.println(player.getName() + " won " + winnings + " chips.");
+        } else {
+            System.out.println(player.getName() + " lost " + player.getBet() + " chips.");
+        }
+        player.resetBets();
+    }
+
+    private List<String> spinReels() {
         Random random = new Random();
         List<String> result = new ArrayList<>();
         for (List<String> reel : reels) {
-            String res = reel.get(random.nextInt(reel.size()));
-            System.out.print(res + "  ");
-            result.add(res);
+            result.add(reel.get(random.nextInt(reel.size())));
         }
-        System.out.println();
         return result;
-
     }
-
-    @Override
-
-    public void play() {
-    //iterate through available players
-        for(Player player:players){
-
-            boolean currentBet = player.placeBet();
-
-
-            //check if bet was placed. if so spin the wheel and check if user has a match.
-            // might be able to update for betting on multiple lines.
-            if (currentBet) {
-
-                List<String> outcome = spinReels();
-                Integer payoutMulti = 0;
-
-                // Check if there's a match, and payout
-                //TODO: incorporate multi-line betting if time permitting.
-                if (outcome.get(0).equals(outcome.get(1)) && outcome.get(0).equals(outcome.get(2))) {
-                    payoutMulti = payouts.get(outcome.get(1));
-                    System.out.println(player.getName() + " won " + payoutMulti * player.getBet() + " chips");
-                } else {
-                    System.out.println("L, you lost " + player.getBet() + " chips");
-                }
-                player.addChips(payoutMulti * player.getBet());
-            }
-        player.resetBets();
-        }
-    }
-
 }

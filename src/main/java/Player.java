@@ -88,7 +88,10 @@ to the using the original bet amount, and second overload updates a bet based on
         chips += amount;
     }
 
-    public int getBet(){
+    public int getBet() {
+        if (bets.isEmpty()) {
+            return 0;
+        }
         return bets.get(0);
     }
 
@@ -97,6 +100,9 @@ to the using the original bet amount, and second overload updates a bet based on
     }
 
     public int getBet(int index){
+        if (bets.isEmpty()) {
+            return 0;
+        }
         return bets.get(index);
     }
     public void resetBets(){

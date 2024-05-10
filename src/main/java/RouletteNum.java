@@ -4,16 +4,15 @@ import java.util.Arrays;
 //Holds number statistics.
 public class RouletteNum {
     private final int num;
-    private final String numString;
     private final int color;
     private final int row;
     private final int column;
-
+    String numString;
 
 
     public RouletteNum(int num){
         this.num = num;
-        this.numString = (num==37?"00":Integer.toString(num));
+        String numString = (num == 37 ? "00" : Integer.toString(num));
         this.row = ((num==0||num==37)?0:(int)Math.ceil(num/3.0));
         this.column = (num==0||num==37)?0:(num%3==0?3:num%3);
         this.color = setColor(num);
@@ -31,7 +30,7 @@ public class RouletteNum {
             return 0;
     }
 
-
+public String getNumString(){return numString;}
 public int getNum(){
     return num;
 }
@@ -44,5 +43,4 @@ public int getRow(){
 public int getColumn(){
     return column;
 }
-public String getNumString(){return numString;}
 }

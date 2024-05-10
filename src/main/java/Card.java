@@ -1,6 +1,6 @@
 public class Card {
-    private String suit;
-    private String rank;
+    private final String suit;
+    private final String rank;
     private int value;
 
     public Card(String rank, String suit) {

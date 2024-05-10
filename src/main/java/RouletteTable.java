@@ -9,7 +9,7 @@ public class RouletteTable {
     //TODO: not necessary if using a front end
     //List that holds number colors
     public static final int[] RED_NUMBERS = {1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36};
-    public static final int[] BLACK_NUMBERS = {2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35};
+   // public static final int[] BLACK_NUMBERS = {2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35};
 
     //Enum that holds bet multipliers and payout descriptions.
     public enum BetType {
@@ -71,18 +71,16 @@ public class RouletteTable {
 
         // Print the numbers rotated
         for (int col = 0; col < 3; col++) {
-            for (int row = 0; row < numbers.length; row++) {
+            for (String[] strings : numbers) {
                 String number;
-                if (col < numbers[row].length) {
+                if (col < strings.length) {
 
-                    if (numbers[row][col].trim().equals("0")|| numbers[row][col].trim().equals("00")) {
-                        number = ANSI_GREEN + numbers[row][col]  + ANSI_RESET;
-                    }
-                    else if ( Arrays.binarySearch(RED_NUMBERS,Integer.parseInt(numbers[row][col].trim()))>=0) {
-                         number = ANSI_RED + numbers[row][col]  + ANSI_RESET;
-                    }
-                    else {
-                         number = ANSI_BLACK + numbers[row][col]  + ANSI_RESET;
+                    if (strings[col].trim().equals("0") || strings[col].trim().equals("00")) {
+                        number = ANSI_GREEN + strings[col] + ANSI_RESET;
+                    } else if (Arrays.binarySearch(RED_NUMBERS, Integer.parseInt(strings[col].trim())) >= 0) {
+                        number = ANSI_RED + strings[col] + ANSI_RESET;
+                    } else {
+                        number = ANSI_BLACK + strings[col] + ANSI_RESET;
 
                     }
                     System.out.printf("|%-5s", number);

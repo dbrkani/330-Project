@@ -9,10 +9,10 @@ public class Roulette extends Games {
     //hold "wheel"
     private final ArrayList<RouletteNum> numbers;
     //hold users chosen numbers for bet
-    private HashMap<Integer,ArrayList<ArrayList<RouletteNum>>> userNumbers;
+    private final HashMap<Integer,ArrayList<ArrayList<RouletteNum>>> userNumbers;
     //hold users bet choice.
-    private HashMap<Integer,ArrayList<Integer>> userChoices;
-    private Scanner scanner;
+    private final HashMap<Integer,ArrayList<Integer>> userChoices;
+    private final Scanner scanner;
 
     public Roulette(ArrayList<Player> players) {
         super(players);
@@ -36,7 +36,7 @@ public class Roulette extends Games {
     //calculate winner, takes random number as parameter
     public void calcWinner(int ball){
         System.out.println("Spinning....");
-        System.out.println("Landed on "+ball+"!");
+        System.out.println("Landed on "+numbers.get(ball).getNumString()+"!");
         //get the number class for the spin result
         RouletteNum winner = numbers.get(ball);
 
@@ -105,7 +105,7 @@ public class Roulette extends Games {
                             //return bet if user asked to see options again
                             player.addChips(betHolder);
                         }
-                        //user bet numbers, wait for all of users inputs if user has to input more than one num
+                        //user bet numbers, wait for all users inputs if user has to input more than one num
 
                         else if (userInt == 2 || userInt == 4) {
                             System.out.println("Pick two numbers:");
@@ -154,7 +154,7 @@ public class Roulette extends Games {
             userChoices.put(player.getID(), thisUserChoices);
             userNumbers.put(player.getID(), thisUsersNumbers);
         }
-        calcWinner(random.nextInt(38));
+        calcWinner(spin());
     }
 
 }

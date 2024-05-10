@@ -2,18 +2,17 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Casino {
-    private ArrayList<Player> players;
-    private Game currentGame;
-    private Scanner scanner;
+    private final ArrayList<Player> players;
+    private final Scanner scanner;
 //casino initializes starting players, and handles which game to play.
     public Casino() {
         this.scanner = new Scanner(System.in);
-        this.players = new ArrayList<Player>();
+        this.players = new ArrayList<>();
         System.out.println("Enter player names:");
 //TODO: change to do-while
         //gets each users name, adds them to player list
         String userIn = scanner.nextLine();
-        while(!userIn.equals("exit")&&!userIn.equals("")) {
+        while(!userIn.equals("exit")&& !userIn.isEmpty()) {
 
             Player player = new Player(userIn);
             players.add(player);
@@ -26,14 +25,14 @@ public class Casino {
 
     public void chooseGame() {
         // Keep the program running while you still want to play
-        boolean menu = true;
-        while (menu) {
+        while (true) {
             for(Player player :players){
                 System.out.println("Player "+player.getID()+":" + player.getName() + "\nChips: " + player.getChips());
             }
             System.out.println("\n\nChoose a game to play:\n1: Slots\n2: Blackjack\n3: Roulette\n0: Exit");
 
             int choice = scanner.nextInt();
+            Game currentGame;
             switch (choice) {
                 case 1:
                     currentGame = new Slots(players);
@@ -46,7 +45,6 @@ public class Casino {
                     break;
                 default:
                     System.out.println("Exiting");
-                    menu = false;
                     return;
             }
             playGame(currentGame);

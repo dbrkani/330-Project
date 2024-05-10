@@ -1,11 +1,6 @@
 import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Scanner;
-/* utility class to manage bet validity and bet payout. those must be separate due to user placing multiple bets
-before wheel is spun
- */
+
 public final class RouletteBets {
-    private final ArrayList<RouletteNum> numbers = new ArrayList<>();
 
     private RouletteBets() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
@@ -34,13 +29,12 @@ public final class RouletteBets {
 //assigning a valid integer to return for non number bets. probably irrelevant but good to be safe during testing.
     public static int handleOpenBets(int betPlaced) {
 
-        int result = switch (betPlaced) {
+        return switch (betPlaced) {
             case 8, 9, 11, 13 -> 1;
             case 10 -> 19;
             case 12, 14 -> 2;
             default -> throw new IllegalArgumentException();
         };
-        return result;
     }
 
 //switch case for checking valid bets. cases determined by user input and bet list.
@@ -61,7 +55,7 @@ public final class RouletteBets {
 
     }
 
-    //TODO: most of these can be an inline return, but easier readability this way.
+    //Most of these can be an inline return, but easier readability this way.
 
     //return winner payout multiplier, set to 0 if loss
     public static int calcWinner(RouletteNum num, ArrayList<RouletteNum> betNums, int betPlaced) {
@@ -81,7 +75,7 @@ public final class RouletteBets {
             //column
             case 7 -> columnWinner(num,betNums);
             //first five
-            case 8 -> firstFiveWinner(num,betNums);
+            case 8 -> firstFiveWinner(num);
             //first half
             case 9 -> firstHalfWinner(num);
             //second half
@@ -131,7 +125,7 @@ public final class RouletteBets {
         return num.getColumn() == betNums.getFirst().getColumn()?3:0;
     }
 
-    public static int firstFiveWinner(RouletteNum num, ArrayList<RouletteNum> betNums) {
+    public static int firstFiveWinner(RouletteNum num) {
         int number = num.getNum();
         return(number ==0||number==1||number==2||number==3||number==37)?7:0;
     }

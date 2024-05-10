@@ -89,11 +89,7 @@ to the using the original bet amount, and second overload updates a bet based on
     }
 
     public int getBet(){
-        return bets.get(0);
-    }
-
-    public ArrayList<Integer> getAllBets(){
-        return bets;
+        return bets.getFirst();
     }
 
     public long getBet(int index){

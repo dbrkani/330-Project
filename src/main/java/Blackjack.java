@@ -75,7 +75,7 @@ public class Blackjack extends Games {
 
     public void printHand(List<Card> hand) {
         for (Card card : hand) {
-            if (card.equals(hand.get(hand.size()-1)))
+            if (card.equals(hand.getLast()))
                 System.out.println(card);
             else
                 System.out.print(card+ ", ");
@@ -97,7 +97,7 @@ public class Blackjack extends Games {
     //TODO: maybe can use this to create bot players
     //logic for CPU hand
     public int dealerPlay() {
-        dealerHand.get(0);
+        dealerHand.getFirst();
         int value = 0;
         int aceCount = 0;
 
@@ -167,7 +167,7 @@ win if its better than the dealer, split if its equal to the dealer and
             player.placeBet();
         }
         dealInitialCards();
-        System.out.println("Dealer showing a " + dealerHand.get(0));
+        System.out.println("Dealer showing a " + dealerHand.getFirst());
 
         for (Player player : players) {
             ArrayList<Integer> handVal= new ArrayList<>();

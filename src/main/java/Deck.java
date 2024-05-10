@@ -3,18 +3,18 @@ import java.util.Collections;
 import java.util.List;
 //creates a deck that generates deals, and holds cards.
 public class Deck {
-    private List<Card> cards;
+    private final List<Card> cards;
     int numDecks;
 
     public Deck() {
-        this.cards = new ArrayList<Card>();
+        this.cards = new ArrayList<>();
         this.numDecks = 1;
         initializeDeck();
         shuffle();
     }
 //different games use different numbers of decks. number of decks parameter is good future proofing for new games
     public Deck(int numDecks) {
-        this.cards = new ArrayList<Card>();
+        this.cards = new ArrayList<>();
         this.numDecks = numDecks;
         for (int i = 0; i < this.numDecks; i++)
             initializeDeck();
@@ -49,7 +49,7 @@ public class Deck {
     // remove the first card in a deck, then return it
     public Card dealCard() {
         if (!this.cards.isEmpty()) {
-            return this.cards.remove(0);
+            return this.cards.removeFirst();
         }
         return null;
     }

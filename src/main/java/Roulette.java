@@ -51,12 +51,12 @@ public class Roulette extends Games {
             ArrayList<Integer> userChoice = userChoices.get(player.getID());
             //send user choices to Roulette bets calc winner to determine payout
             for (int i = 0; i < userNums.size(); i ++) {
-                int thisBet = player.getBet(i);
+                long thisBet = player.getBet(i);
                 int  multiplier = RouletteBets.calcWinner(winner,userNums.get(i),userChoice.get(i));
 
                 if(multiplier >0){
                     System.out.println("Won +"+(thisBet*multiplier-thisBet)+" chips!");
-                    player.addChips(thisBet*multiplier);
+                    player.addChips((int) (thisBet*multiplier));
                 }
 
             }
@@ -80,7 +80,7 @@ public class Roulette extends Games {
 
             do {
                 ArrayList<RouletteNum> thisUsersNumber = new ArrayList<>();
-                System.out.println("Place Bet:");
+                System.out.println("Place Bet, Press enter to end turn:");
                 int betHolder = 0;
                 userIn = scanner.nextLine().trim();  // Use nextLine() to handle full user input immediately
                 if (userIn.equals("exit") || userIn.isEmpty()) {
@@ -107,11 +107,29 @@ public class Roulette extends Games {
                         }
                         //user bet numbers, wait for all of users inputs if user has to input more than one num
 
-                        else if (userInt < 8 && userInt > 0) {
-                            System.out.println("Pick your numbers");
+                        else if (userInt == 2 || userInt == 4) {
+                            System.out.println("Pick two numbers:");
+                            userIn = scanner.nextLine().trim();
+                            String[] inputs = userIn.split(" ");
+
+                            // Limit the loop to process at most two numbers from the input
+                            for (int i = 0; i < inputs.length && i < 2; i++) {
+                                try {
+                                    int num = Integer.parseInt(inputs[i]);
+                                    thisUsersNumber.add(numbers.get(num));
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Invalid input: '" + inputs[i] + "' is not a number.");
+                                    break;
+                                } catch (IndexOutOfBoundsException e) {
+                                    System.out.println("Invalid input: '" + inputs[i] + "' is not a valid roulette number.");
+                                    break;
+                                }
+                            }
+                        }
+                        else if (userInt <8){
+                            System.out.println("Pick your choice");
                             userIn = scanner.nextLine();
-                            while (scanner.hasNext())
-                                thisUsersNumber.add(numbers.get(Integer.parseInt(userIn)));
+                            thisUsersNumber.add(numbers.get(Integer.parseInt(userIn)));
                         }
                         else{
                             thisUsersNumber.add(numbers.get(RouletteBets.handleOpenBets(userInt)));
@@ -120,10 +138,15 @@ public class Roulette extends Games {
                             thisUserChoices.add(userInt);
                             thisUsersNumbers.add(thisUsersNumber);
                         }
+                        else{
+                            System.out.println("Invalid bet");
+                            player.addChips(betAmount);
+                        }
                     }
                     //TODO: make better catches
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid input");
+                    System.out.println(e.getMessage());
                     //return bet if exception thrown
                     player.addChips(betHolder);
                 }

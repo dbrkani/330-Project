@@ -45,7 +45,12 @@ public final class RouletteBets {
 
 //switch case for checking valid bets. cases determined by user input and bet list.
     public static boolean validBets(int betPlaced, ArrayList<RouletteNum> betNums) {
-        boolean result = switch (betPlaced) {
+        for (RouletteNum betNum : betNums) {
+            if (betNum.getNum() <0 || betNum.getNum() >37) {
+                return false;
+            }
+        }
+        return switch (betPlaced) {
             case 1 -> singleValid(betNums.getFirst());
             case 2 -> doublesValid(betNums);
             case 4 -> quadsValid(betNums);
@@ -53,7 +58,6 @@ public final class RouletteBets {
             case 6 -> dozenValid(betNums.getFirst());
             default -> true;
         };
-        return result;
 
     }
 
@@ -61,7 +65,7 @@ public final class RouletteBets {
 
     //return winner payout multiplier, set to 0 if loss
     public static int calcWinner(RouletteNum num, ArrayList<RouletteNum> betNums, int betPlaced) {
-        int result= switch (betPlaced) {
+        return switch (betPlaced) {
             //single
             case 1 -> singlesWinner(num,betNums);
             //double
@@ -89,7 +93,6 @@ public final class RouletteBets {
 
             default -> throw new IllegalStateException("Unexpected value: " + betPlaced);
         };
-        return result;
 
 
 

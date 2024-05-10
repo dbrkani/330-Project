@@ -41,6 +41,9 @@ public class Casino {
                 case 2:
                     currentGame = new Blackjack(players);
                     break;
+                case 3:
+                    currentGame = new Roulette(players);
+                    break;
                 default:
                     System.out.println("Exiting");
                     menu = false;

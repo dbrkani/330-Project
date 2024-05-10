@@ -14,7 +14,7 @@ public class RouletteTable {
     //Enum that holds bet multipliers and payout descriptions.
     public enum BetType {
         SINGLE(36, "Single number bet, Self Explanatory"),
-        DOUBLE(18, "Double number bet, Bet on two adjacent numbers. Pick a number and a direction"),
+        DOUBLE(18, "Double number bet, Bet on two adjacent numbers"),
         TRIPLE(12, "Three number bet, Bet on a whole row. Pick a number in a row"),
         QUADRUPLE(9, "Four number bet, Bet on four adjacent numbers, Pick Top left an bottom right numbers"),
         FIVES(7, "Five number bet, Bet on 0-00-1-2-3."),
@@ -46,53 +46,58 @@ public class RouletteTable {
     public static void printBets() {
         System.out.println("Available Roulette Bets and Payouts:");
         for (BetType bet : BetType.values()) {
-            System.out.println(bet.name() + ": " + bet.getDescription() + " Payout " + bet.getPayoutMultiplier() + " to 1.");
+            System.out.println(bet.name() + ": "+ bet.getPayoutMultiplier() + " to 1  " + bet.getDescription() );
         }
     }
-    //TODO: hella ugly. replace with GUI or make it look better.
-    //console table
+
     public static void printRouletteTable() {
-        String[] topNumbers = {"0", "00"};
         String[][] numbers = {
-                {"1", "2", "3"},
-                {"4", "5", "6"},
-                {"7", "8", "9"},
-                {"10", "11", "12"},
-                {"13", "14", "15"},
-                {"16", "17", "18"},
-                {"19", "20", "21"},
-                {"22", "23", "24"},
-                {"25", "26", "27"},
-                {"28", "29", "30"},
-                {"31", "32", "33"},
-                {"34", "35", "36"}
+                {"  0  ", " 00  "},
+                {"  1  ", "  2  ", "  3  "},
+                {"  4  ", "  5  ", "  6  "},
+                {"  7  ", "  8  ", "  9  "},
+                {" 10  ", " 11  ", " 12  "},
+                {" 13  ", " 14  ", " 15  "},
+                {" 16  ", " 17  ", " 18  "},
+                {" 19  ", " 20  ", " 21  "},
+                {" 22  ", " 23  ", " 24  "},
+                {" 25  ", " 26  ", " 27  "},
+                {" 28  ", " 29  ", " 30  "},
+                {" 31  ", " 32  ", " 33  "},
+                {" 34  ", " 35  ", " 36  "}
         };
 
-        // Print top section for green colors
-        System.out.println("----------------");
-        System.out.println("|   "+ANSI_GREEN+"0"+ANSI_RESET+"   |  "+ANSI_GREEN+ "00"+ANSI_RESET+ "  |");
-        System.out.println("----------------");
+        String[] bets = {"1-18", "EVEN", " RED", "BLACK", "ODD ", "19-36"};
 
-        // Print the rest of them
-        for (String[] row : numbers) {
-            System.out.println("+----+----+----+");
-            String number;
-            for (String num : row) {
-                if(Arrays.binarySearch(RED_NUMBERS,Integer.parseInt(num))>=0) {
-                    number = ANSI_RED + num  + ANSI_RESET;
+        // Print the numbers rotated
+        for (int col = 0; col < 3; col++) {
+            for (int row = 0; row < numbers.length; row++) {
+                String number;
+                if (col < numbers[row].length) {
+
+                    if (numbers[row][col].trim().equals("0")|| numbers[row][col].trim().equals("00")) {
+                        number = ANSI_GREEN + numbers[row][col]  + ANSI_RESET;
+                    }
+                    else if ( Arrays.binarySearch(RED_NUMBERS,Integer.parseInt(numbers[row][col].trim()))>=0) {
+                         number = ANSI_RED + numbers[row][col]  + ANSI_RESET;
+                    }
+                    else {
+                         number = ANSI_BLACK + numbers[row][col]  + ANSI_RESET;
+
+                    }
+                    System.out.printf("|%-5s", number);
+                } else {
+                    System.out.print("|     "); // Fill space if no element
                 }
-                else
-                    number = ANSI_BLACK + num + ANSI_RESET;
-                System.out.print("| " + number + (num.length() == 1 ? "  " : " ") );
             }
             System.out.println("|");
         }
-        System.out.println("+----+----+----+");
 
-        // Print bet choices
-        System.out.println("|1-18|EVEN| "+ANSI_RED+"RED"+ANSI_RESET+"|"+ANSI_BLACK+"BLACK"+ANSI_RESET+"|ODD |19-36|");
-        System.out.println();
-
-        printBets();
+        // Print the bets horizontally at the bottom
+        for (String bet : bets) {
+            System.out.printf("|%-5s", bet);
+        }
+        System.out.println("|");
     }
 }
+

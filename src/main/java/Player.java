@@ -13,7 +13,7 @@ Players to have identical names
     private static final AtomicInteger count = new AtomicInteger(0);
     private final int  playerID;
     private final String name;
-    private int chips;
+    private long chips;
 /*
 Bets are tracked by the player class in order easily pull and create bets between games.
  */
@@ -51,12 +51,12 @@ to the using the original bet amount, and second overload updates a bet based on
         }
 
     }
-    public boolean placeBet(int amount) {
+    public boolean placeBet(long amount) {
         if (chips >= amount) {
             chips -=amount;
             System.out.println("Bet placed: " + amount);
             System.out.println();
-            bets.add(amount);
+            bets.add((int) amount);
             return true;
 
         } else {
@@ -67,10 +67,10 @@ to the using the original bet amount, and second overload updates a bet based on
 
     }
 
-    public boolean placeBet(int index, int amount) {
+    public boolean placeBet(int index, long amount) {
         if (chips >= amount && amount>0) {
             chips -=amount;
-            bets.set(index, bets.get(index)+amount);
+            bets.set(index, (int) (bets.get(index)+amount));
             System.out.println("Bet updated: " + bets.get(index));
             System.out.println();
             return true;
@@ -96,14 +96,14 @@ to the using the original bet amount, and second overload updates a bet based on
         return bets;
     }
 
-    public int getBet(int index){
+    public long getBet(int index){
         return bets.get(index);
     }
     public void resetBets(){
         bets.clear();
     }
 
-    public int getChips() {
+    public long getChips() {
         return chips;
     }
 

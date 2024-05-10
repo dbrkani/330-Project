@@ -33,7 +33,7 @@ public class Blackjack extends Games {
 // check if player has enough money, then deal a card
     public Card doubleDown(List<Card> currentHand, Player player) {
         int handIndex = hands.get(player.getID()).indexOf(currentHand);
-        int bet = player.getBet(handIndex);
+        long bet = player.getBet(handIndex);
         boolean placeBet= player.placeBet(handIndex,bet);
         if (currentHand.size() == 2 && placeBet) {
             Card hitCard =deck.dealCard();
@@ -52,7 +52,7 @@ public class Blackjack extends Games {
      */
     public int[] split(List<Card> currentHand, Player player) {
         int handIndex = hands.get(player.getID()).indexOf(currentHand);
-        int bet = player.getBet(handIndex);
+        long bet = player.getBet(handIndex);
         boolean newBet = player.placeBet(bet);
 
         if (currentHand.size() == 2 && currentHand.get(0).getRank().equals(currentHand.get(1).getRank()) && newBet) {
@@ -137,13 +137,13 @@ win if its better than the dealer, split if its equal to the dealer and
             ArrayList<Integer> playerVals = endValues.get(player);
             for (Integer value : playerVals) {
                 int valueIndex = playerVals.indexOf(value);
-                int bet = player.getBet(valueIndex);
+                long bet = player.getBet(valueIndex);
                 if (value > dealerValue && value < 22||value<22 && dealerValue>21) {
                     System.out.println(player.getName()+" wins with " + value + " against dealer's " + dealerValue);
-                    player.addChips(bet*2);
+                    player.addChips((int) (bet*2));
                 } else if(value==dealerValue && value < 22){
                     System.out.println(player.getName()+" breaks even with dealer at " + dealerValue);
-                    player.addChips(bet);
+                    player.addChips((int) bet);
                 }
 
                 else {
@@ -242,7 +242,7 @@ win if its better than the dealer, split if its equal to the dealer and
                                     System.out.println("Incorrect choice, try again.");
                                     break;
                             }
-                            //TODO: make a better exception.
+
                         } catch (Exception e) {
                             System.out.println(e.getMessage());
                             scanner.next(); // this handles the invalid input
@@ -254,7 +254,7 @@ win if its better than the dealer, split if its equal to the dealer and
                         break;
                     } else {
                         //if bust, break loop
-                        //TODO: check if ace count is required.
+
                         if (aceCount==0) {
                             System.out.println("Bust!");
                             handVal.add(value);

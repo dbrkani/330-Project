@@ -10,22 +10,22 @@ public class Player {
     /**
      * Static counter for generating unique player IDs.
      */
-    private static final AtomicInteger count = new AtomicInteger(0);
+    protected static final AtomicInteger count = new AtomicInteger(0);
 
     /**
      * Unique identifier for the player.
      */
-    private final int playerID;
+    protected final int playerID;
 
     /**
      * Name of the player.
      */
-    private final String name;
+    protected  String name;
 
     /**
      * Amount of chips the player has for betting.
      */
-    private long chips;
+    protected long chips;
 
     /**
      * List of bet amounts placed by the player.
@@ -132,6 +132,10 @@ public class Player {
         return bets.getFirst();
     }
 
+    public ArrayList<Integer> getAllBets() {
+        return bets;
+    }
+
     /**
      * Retrieves a bet by index.
      *
@@ -174,5 +178,14 @@ public class Player {
      */
     public int getID() {
         return playerID;
+    }
+    /**
+     * Changes the name of the player.
+     *
+     * @param newName name to change to
+     */
+
+    public void setName(String newName){
+        name = newName;
     }
 }

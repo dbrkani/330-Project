@@ -51,8 +51,15 @@ public class RouletteTable {
     }
 
     public static void printBet(int idx) {
+        BetType bet;
         System.out.println("Available Roulette Bets and Payouts:");
-        BetType bet = BetType.values()[idx-1];
+
+        if (idx > 0 && idx <11)
+            bet = BetType.values()[idx - 1];
+        else if (idx ==11||idx ==12)
+            bet = BetType.COLOR;
+        else
+            bet = BetType.ODDEVEN;
         System.out.println(bet.name() + ": "+ bet.getPayoutMultiplier() + " to 1  " + bet.getDescription() );
     }
 

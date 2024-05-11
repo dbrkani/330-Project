@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
+
 import java.util.HashMap;
 
 public class Roulette extends Games {
@@ -12,7 +12,6 @@ public class Roulette extends Games {
     private final HashMap<Integer,ArrayList<ArrayList<RouletteNum>>> userNumbers;
     //hold users bet choice.
     private final HashMap<Integer,ArrayList<Integer>> userChoices;
-    private final Scanner scanner;
 
     public Roulette(ArrayList<Player> players) {
         super(players);
@@ -24,7 +23,6 @@ public class Roulette extends Games {
         }
         userNumbers = new HashMap<>();
         userChoices = new HashMap<>();
-        this.scanner = new Scanner(System.in);
     }
 
     //generate a number between 0 and 37
@@ -50,7 +48,7 @@ public class Roulette extends Games {
                 int  multiplier = RouletteBets.calcWinner(winner,userNums.get(i),userChoice.get(i));
 
                 if(multiplier >0){
-                    System.out.println("Won +"+(thisBet*multiplier-thisBet)+" chips!");
+                    System.out.println(player.getName()+ " won +"+(thisBet*multiplier-thisBet)+" chips!");
                     player.addChips((int) (thisBet*multiplier));
                 }
             }
@@ -77,7 +75,7 @@ public class Roulette extends Games {
 
             do {
                 ArrayList<RouletteNum> thisUsersNumber = new ArrayList<>();
-                System.out.println("Place Bet, Press enter to end turn:");
+                System.out.println("Place Bet, Type \"exit\" or press enter to end turn:");
                 int betHolder = 0;
                 userIn = scanner.nextLine().trim();  // Use nextLine() to handle full user input immediately
                 if (userIn.equals("exit") || userIn.isEmpty()) {
@@ -103,6 +101,7 @@ public class Roulette extends Games {
                             RouletteTable.printBets();
                             //return bet if user asked to see options again
                             player.addChips(betHolder);
+                            player.getAllBets().removeLast();
                         }
                         //user bet numbers, wait for all users inputs if user has to input more than one num
 

@@ -1,7 +1,7 @@
 import java.util.Arrays;
 
 /**
- * {@code RouletteTable simulates the layout and functionality of a roulette table.
+ * {@code RouletteTable} simulates the layout and functionality of a roulette table.
  * It provides methods to print the betting options, roulette numbers, and their colors.
  */
 

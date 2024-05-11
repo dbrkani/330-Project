@@ -1,9 +1,31 @@
 import java.util.*;
-public class Blackjack extends Games {
-    private final Deck deck;
-    private final Map<Integer, ArrayList<ArrayList<Card>>> hands;
-    private final ArrayList<Card> dealerHand;
 
+
+/**
+ * {@code Blackjack} extends {@code Games}, simulating blackjack. It manages the deck, player hands, dealer's hand,
+ * and the overall game logic like dealing, betting, and calculating winners.
+ */
+public class Blackjack extends Games {
+
+    /**
+     * The {@code Deck} of cards used in the game.
+     */
+
+    private final Deck deck;
+    /**
+     * Maps each player's ID to their list of hands. Each player can have multiple hands due to splitting
+     */
+    private final Map<Integer, ArrayList<ArrayList<Card>>> hands;
+    /**
+     * List of cards for the dealer's hand
+     */
+    private final ArrayList<Card> dealerHand;
+    /**
+     * Constructs a new {@code Blackjack} game with the specified list of players
+     * Initializes the deck and sets up empty maps and lists for player and dealer hands.
+     *
+     * @param players the list of players playing.
+     */
     public Blackjack(ArrayList<Player> players) {
         super(players);
         //TODO: change deck to 8, test to make sure it doesnt break.
@@ -11,9 +33,11 @@ public class Blackjack extends Games {
         this.hands = new HashMap<>();
         this.dealerHand = new ArrayList<>();
     }
-
+    /**
+     * Deals first two cards to each player and to the dealer at the start of the game.
+     */
     public void dealInitialCards() {
-//give each player two cards
+
         for (Player player : players) {
             ArrayList<Card> hand = new ArrayList<>();
             hand.add(deck.dealCard());
@@ -22,13 +46,18 @@ public class Blackjack extends Games {
             handContainer.add(hand);
             hands.put(player.getID(), handContainer);
         }
-        //create dealer starting hand
+
         dealerHand.add(deck.dealCard());
         dealerHand.add(deck.dealCard());
 
     }
-
-// check if player has enough money, then deal a card
+    /**
+     * Allows a player to double their bet and receive exactly one additional card.
+     *
+     * @param currentHand The hand that the player wants to double down on
+     * @param player The player who is doubling down
+     * @return The new card dealt to the player, or null player cant double down
+     */
     public Card doubleDown(List<Card> currentHand, Player player) {
         int handIndex = hands.get(player.getID()).indexOf(currentHand);
         long bet = player.getBet(handIndex);
@@ -44,9 +73,13 @@ public class Blackjack extends Games {
     }
 
 
-    /*
-    check if player has enough money, then remove card from hand and put it in a new hand. deal a card to each hand.
-
+    /**
+     * Allows a player to split their hand into two if the two cards are the same rank.
+     *
+     * @param currentHand The hand the player wants to split.
+     * @param player      The player attempting the split.
+     * @return An array of two integers indicating the value and suit of the card removed from the original hand, or null
+     * if the player cannot split.
      */
     public int[] split(List<Card> currentHand, Player player) {
         int handIndex = hands.get(player.getID()).indexOf(currentHand);
@@ -70,7 +103,11 @@ public class Blackjack extends Games {
             return null;
         }
     }
-
+    /**
+     * Calculates and prints the value of a hand
+     *
+     * @param hand The hand that's being calculated
+     */
     public void printHand(List<Card> hand) {
         for (Card card : hand) {
             if (card.equals(hand.getLast()))
@@ -79,7 +116,16 @@ public class Blackjack extends Games {
                 System.out.print(card+ ", ");
         }
     }
-//check if hand is over 21, if there are aces in the hand, change one of its value to 1.
+
+    /**
+     * Gets the value of the hand. alters it if the player has aces and is in danger of going over
+     *
+     * @param card The card to add to the hand's value
+     * @param value Current total value of the hand
+     * @param aceCount Number of aces in the hand
+     * @return An array with the new value and the new count of aces
+     */
+
     public int[] getValue(Card card, int value, int aceCount) {
         int val = value + card.getVal();
         if (card.getRank().equals("Ace"))
@@ -92,22 +138,22 @@ public class Blackjack extends Games {
         return new int[]{val, aceCount};
 
     }
-    //TODO: maybe can use this to create bot players
-    //logic for CPU hand
+    /**
+     * Executes the dealer's logic. The dealer will hit until their total reaches 17 or higher
+     *
+     * @return The final value of the dealer's hand.
+     */
     public int dealerPlay() {
         dealerHand.getFirst();
         int value = 0;
         int aceCount = 0;
 
-
-        // Calculate initial value of dealer's hand
         for (Card card : dealerHand) {
             int[] results = getValue(card, value, aceCount);
             value = results[0];
             aceCount = results[1];
         }
 
-        // Dealer hits until their score is 17 or more
         while (value < 17) {
             Card newCard = deck.dealCard();
             dealerHand.add(newCard);
@@ -116,18 +162,19 @@ public class Blackjack extends Games {
             aceCount = results[1];
         }
 
-        printHand(dealerHand); // Assuming there's a method to print the hand
+        printHand(dealerHand);
         System.out.println("Dealer's final score: " + value);
 
         return value;
     }
 
-/*check each players hand, lose if over 21
-if under 21,
-win if its better than the dealer, split if its equal to the dealer and
- */
 
-    //TODO: change logic so a bust is checked first
+    /**
+     * Compares the final hand values of all players against the dealer to determine winners.
+     *
+     * @param endValues A map of each player and their hand values
+     */
+
     public void calcWinner(HashMap<Player,ArrayList<Integer>>endValues) {
         int dealerValue = dealerPlay();
         Set<Player> players= endValues.keySet();
@@ -154,12 +201,14 @@ win if its better than the dealer, split if its equal to the dealer and
         }
         dealerHand.clear();
     }
-
+    /**
+     * Does a full round of Blackjack. Takes bets, deals cards, allowing players to act, and calculating the winner
+     */
     public void play() {
-        //container for final values of each hand
+
         HashMap<Player,ArrayList<Integer>> endValues = new HashMap<>();
 
-        //players place bets and get dealt cards.
+
         //FIXME: players can currently bet 0 and still play.
         for (Player player : players) {
             player.placeBet();
@@ -169,10 +218,10 @@ win if its better than the dealer, split if its equal to the dealer and
 
         for (Player player : players) {
             ArrayList<Integer> handVal= new ArrayList<>();
-            // Get hands for the active player
+
             ArrayList<ArrayList<Card>> playerHands = hands.get(player.getID());
             for (ArrayList<Card> hand : playerHands) {
-                //calculate value for each hand.
+
                 int value = 0;
                 int aceCount = 0;
                 for (Card card : hand) {
@@ -181,7 +230,7 @@ win if its better than the dealer, split if its equal to the dealer and
                     value = results[0];
                     aceCount = results[1];
                 }
-                // process individual hand
+
                 loop:
                 while (true) {
                     System.out.println(player.getName());
@@ -197,7 +246,7 @@ win if its better than the dealer, split if its equal to the dealer and
                         try {
                             int choice = scanner.nextInt();
                             switch (choice) {
-                                //hit - deal card and update value. loop
+
                                 case 1: {
                                     Card hitCard = deck.dealCard();
                                     hand.add(hitCard);
@@ -207,14 +256,14 @@ win if its better than the dealer, split if its equal to the dealer and
                                 }
                                     break;
                                 case 2: {
-                                    //stand - send hand value to container and end.
+
                                     printHand(hand);
                                     System.out.println("Standing at: " + value);
                                     handVal.add(value);
                                     break loop;
                                 }
                                 case 3:
-                                    // double down - try to bet, hit, and stand. loop otherwise.
+
                                     Card doubleDownCard = doubleDown(hand, player);
                                     if (doubleDownCard != null) {
                                         int[] doubleResult = getValue(doubleDownCard,value, aceCount);
@@ -226,7 +275,7 @@ win if its better than the dealer, split if its equal to the dealer and
                                     }
                                     break;
                                 case 4:{
-                                    // Split - remove split card value
+
                                     int[] splitResult = split(hand, player);
                                     if (splitResult!=null){
                                         value -= splitResult[0];
@@ -241,15 +290,15 @@ win if its better than the dealer, split if its equal to the dealer and
 
                         } catch (Exception e) {
                             System.out.println(e.getMessage());
-                            scanner.next(); // this handles the invalid input
+                            scanner.next();
                         }
                     } else if (value == 21) {
-                        //if blackjack, break loop
+
                         System.out.println("Blackjack!");
                         handVal.add(value);
                         break;
                     } else {
-                        //if bust, break loop
+
 
                         if (aceCount==0) {
                             System.out.println("Bust!");

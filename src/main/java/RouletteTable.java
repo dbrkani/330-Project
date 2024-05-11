@@ -1,17 +1,28 @@
 import java.util.Arrays;
+
+/**
+ * {@code RouletteTable simulates the layout and functionality of a roulette table.
+ * It provides methods to print the betting options, roulette numbers, and their colors.
+ */
+
+
 public class RouletteTable {
-    //TODO: not necessary if using a front end
-    //fun lil colors for the console.
+    /**
+     * Fun lil colors for the console.
+     */
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_RESET = "\u001B[0m";
-    //TODO: not necessary if using a front end
-    //List that holds number colors
+    /**
+     * Array holding the numbers that are red on a roulette wheel. able to label other colors with just this list
+     */
     public static final int[] RED_NUMBERS = {1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36};
    // public static final int[] BLACK_NUMBERS = {2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35};
 
-    //Enum that holds bet multipliers and payout descriptions.
+    /**
+     * Enum of the types of bets available on a roulette table with their payout multipliers and descriptions.
+     */
     public enum BetType {
         SINGLE(36, "Single number bet, Self Explanatory"),
         DOUBLE(18, "Double number bet, Bet on two adjacent numbers"),
@@ -29,27 +40,51 @@ public class RouletteTable {
 
         private final int payoutMultiplier;
         private final String description;
-//constructor for enum
+
+        /**
+         * Constructs a new bet type with a specified payout multiplier and description.
+         *
+         * @param payoutMultiplier the multiplier for the bet payout
+         * @param description the description of the bet type
+         */
+
         BetType(int payoutMultiplier, String description) {
             this.payoutMultiplier = payoutMultiplier;
             this.description = description;
         }
+
+        /**
+         * Returns the payout multiplier for the bet type.
+         *
+         * @return the payout multiplier
+         */
+
         public int getPayoutMultiplier() {
             return payoutMultiplier;
         }
-
+        /**
+         * Returns the description of the bet type.
+         *
+         * @return the description
+         */
         public String getDescription() {
             return description;
         }
     }
-
+    /**
+     * Prints a list of all roulette bets along with their payout multipliers and descriptions.
+     */
     public static void printBets() {
         for (BetType bet : BetType.values()) {
             System.out.println(bet.getPayoutMultiplier() + " to 1:  " + bet.getDescription() );
             System.out.println();
         }
     }
-
+    /**
+     * Prints the specific roulette bet based on an index value, displaying the bet type, payout multiplier, and description.
+     *
+     * @param idx the index of the bet type
+     */
     public static void printBet(int idx) {
         BetType bet;
         System.out.println("Available Roulette Bets and Payouts:");
@@ -62,7 +97,10 @@ public class RouletteTable {
             bet = BetType.ODDEVEN;
         System.out.println(bet.name() + ": "+ bet.getPayoutMultiplier() + " to 1  " + bet.getDescription() );
     }
-
+    /**
+     * Prints the roulette table with numbers and their corresponding colors, using color codes for the console.
+     * This method visualizes the layout of a roulette table.
+     */
 
     public static void printRouletteTable() {
         String[][] numbers = {
@@ -82,8 +120,6 @@ public class RouletteTable {
         };
 
         String[] bets = {"1-18", "EVEN", " RED", "BLACK", "ODD ", "19-36"};
-
-        // Print the numbers rotated
         for (int col = 0; col < 3; col++) {
             for (String[] strings : numbers) {
                 String number;

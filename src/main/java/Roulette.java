@@ -1,20 +1,39 @@
 import java.util.ArrayList;
 import java.util.Random;
-
 import java.util.HashMap;
-
+/**
+ * {@code Roulette} extends {@code Games}, simulating a roulette game. It manages roulette numbers,
+ * user bets, and calculates winners using the utility class {@code RouletteBets}
+ */
 public class Roulette extends Games {
-    //random number generator
+    /**
+     * Random number generator for spinning the roulette wheel
+     */
     private final Random random;
-    //hold "wheel"
+    /**
+     * List of {@code RouletteNum} for each number on the roulette wheel
+     */
     private final ArrayList<RouletteNum> numbers;
-    //hold users chosen numbers for bet
+    /**
+     * Maps player's ID to a list of their chosen {@code RouletteNum} for bets
+     */
     private final HashMap<Integer,ArrayList<ArrayList<RouletteNum>>> userNumbers;
-    //hold users bet choice.
+
+    /**
+     * Maps each player's ID to their choices of bets
+     */
     private final HashMap<Integer,ArrayList<Integer>> userChoices;
+
+    /**
+     * Constructs a new {@code Roulette} game with the specified list of players
+     * Initializes the roulette wheel numbers and structures for tracking user bets
+     *
+     * @param players the list of players participating in the roulette game
+     */
 
     public Roulette(ArrayList<Player> players) {
         super(players);
+
         this.random = new Random();
         this.numbers = new ArrayList<>();
         //generate wheel.
@@ -25,24 +44,33 @@ public class Roulette extends Games {
         userChoices = new HashMap<>();
     }
 
-    //generate a number between 0 and 37
+    /**
+     * Generates a random number between 0 and 37, simulating a spin of the roulette wheel
+     *
+     * @return the result of the spin as an integer, representing the "ball"
+     */
     public int spin() {
         return random.nextInt(38);
     }
 
-    //calculate winner, takes random number as parameter
+    /**
+     * Calculates the winners based on the outcome of a spin
+     * uses return integer from {@code RouletteBets} to handle payout multiplier
+     *
+     * @param ball the winning number on the roulette wheel
+     */
     public void calcWinner(int ball){
         System.out.println("Spinning....");
         System.out.println("Landed on "+numbers.get(ball).getNumString()+"!");
-        //get the number class for the spin result
+
         RouletteNum winner = numbers.get(ball);
 
-        //determine if player won or not
+
         for(Player player : players) {
-            //New array lists for particular user choice
+
             ArrayList<ArrayList<RouletteNum>> userNums = userNumbers.get(player.getID());
             ArrayList<Integer> userChoice = userChoices.get(player.getID());
-            //send user choices to Roulette bets calc winner to determine payout
+
             for (int i = 0; i < userNums.size(); i ++) {
                 long thisBet = player.getBet(i);
                 int  multiplier = RouletteBets.calcWinner(winner,userNums.get(i),userChoice.get(i));
@@ -52,14 +80,18 @@ public class Roulette extends Games {
                     player.addChips((int) (thisBet*multiplier));
                 }
             }
-            //clear players bets
+
             player.resetBets();
             userNumbers.remove(player.getID());
             userChoices.remove(player.getID());
         }
     }
-    //TODO: this function is TOO large. break it up
 
+    /**
+     * Runs a round of roulette, including bet placement, wheel spinning, and winner calculation
+     * Each player places their bets, and the bet is validated through {@code RouletteBets}
+     * the wheel is spun, and winners are determined again through {@code RouletteBets}.
+     */
 
 
     public void play() {

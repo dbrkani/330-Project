@@ -2,7 +2,6 @@ import java.util.*;
 public class Blackjack extends Games {
     private final Deck deck;
     private final Map<Integer, ArrayList<ArrayList<Card>>> hands;
-    private final Scanner scanner;
     private final ArrayList<Card> dealerHand;
 
     public Blackjack(ArrayList<Player> players) {
@@ -10,7 +9,6 @@ public class Blackjack extends Games {
         //TODO: change deck to 8, test to make sure it doesnt break.
         this.deck = new Deck();
         this.hands = new HashMap<>();
-        this.scanner = new Scanner(System.in);
         this.dealerHand = new ArrayList<>();
     }
 
@@ -263,6 +261,7 @@ win if its better than the dealer, split if its equal to the dealer and
                 }
             }
             endValues.put(player, handVal);
+            System.out.println();
         }
         calcWinner(endValues);
           }

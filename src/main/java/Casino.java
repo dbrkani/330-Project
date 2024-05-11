@@ -100,7 +100,7 @@ public class Casino {
     private void playGame(Game game) {
         while (checkForBums()) {
             game.play();
-            if (!checkForBums()) {
+            if (checkForBums()) {
                 System.out.println("Play another round? (yes/no)");
                 String response = scanner.next();
                 if (response.equalsIgnoreCase("no")) {

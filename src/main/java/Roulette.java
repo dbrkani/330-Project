@@ -18,7 +18,6 @@ public class Roulette extends Games {
         super(players);
         this.random = new Random();
         this.numbers = new ArrayList<>();
-        //TODO: might be able to make this its own separate utility class.
         //generate wheel.
         for(int i =0;i<38;i++){
             numbers.add(new RouletteNum(i));
@@ -42,10 +41,6 @@ public class Roulette extends Games {
 
         //determine if player won or not
         for(Player player : players) {
-            /*Dashi:
-            TODO: i switched from user to player while sleep deprived. consider changing variable names to conform
-            */
-            //TODO: these variables are for readability. extended get() can be given directly to multiplier
             //New array lists for particular user choice
             ArrayList<ArrayList<RouletteNum>> userNums = userNumbers.get(player.getID());
             ArrayList<Integer> userChoice = userChoices.get(player.getID());
@@ -58,7 +53,6 @@ public class Roulette extends Games {
                     System.out.println("Won +"+(thisBet*multiplier-thisBet)+" chips!");
                     player.addChips((int) (thisBet*multiplier));
                 }
-
             }
             //clear players bets
             player.resetBets();
@@ -66,6 +60,9 @@ public class Roulette extends Games {
             userChoices.remove(player.getID());
         }
     }
+    //TODO: this function is TOO large. break it up
+
+
 
     public void play() {
         RouletteTable.printRouletteTable();
@@ -75,7 +72,7 @@ public class Roulette extends Games {
             ArrayList<ArrayList<RouletteNum>> thisUsersNumbers= new ArrayList<>();
             ArrayList<Integer> thisUserChoices = new ArrayList<>();
             //get the first users bet, exit if the user presses enter or types exit
-            //TODO: incorporate bet cancelling.
+
             String userIn;
 
             do {
@@ -100,6 +97,8 @@ public class Roulette extends Games {
                         //user bet choice
                         userIn = scanner.nextLine().trim();
                         int userInt = Integer.parseInt(userIn);
+                        if(userInt!=0)
+                            RouletteTable.printBet(userInt);
                         if (userInt == 0) {
                             RouletteTable.printBets();
                             //return bet if user asked to see options again
@@ -143,7 +142,6 @@ public class Roulette extends Games {
                             player.addChips(betAmount);
                         }
                     }
-                    //TODO: make better catches
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid input");
                     System.out.println(e.getMessage());

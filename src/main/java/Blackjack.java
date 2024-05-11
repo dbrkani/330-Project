@@ -182,7 +182,6 @@ win if its better than the dealer, split if its equal to the dealer and
                     int[] results = getValue(card, value, aceCount);
                     value = results[0];
                     aceCount = results[1];
-
                 }
                 // process individual hand
                 loop:
@@ -199,7 +198,6 @@ win if its better than the dealer, split if its equal to the dealer and
 
                         try {
                             int choice = scanner.nextInt();
-                            //TODO: can probably be its own function.
                             switch (choice) {
                                 //hit - deal card and update value. loop
                                 case 1: {

@@ -17,10 +17,10 @@ public class RouletteTable {
         DOUBLE(18, "Double number bet, Bet on two adjacent numbers"),
         TRIPLE(12, "Three number bet, Bet on a whole row. Pick a number in a row"),
         QUADRUPLE(9, "Four number bet, Bet on four adjacent numbers, Pick Top left an bottom right numbers"),
-        FIVES(7, "Five number bet, Bet on 0-00-1-2-3."),
         SIXES(6, "Six number bets, Bet on two adjacent rows. Pick a number in the top row."),
         DOZEN(3, "Twelve number bets, Bet on four rows. Pick 1, 13, or 25"),
         COLUMN(3, "Column bet,Pick a number in a column."),
+        FIVES(7, "Five number bet, Bet on 0-00-1-2-3."),
         HALF1(2, "Bet on first half (1-18)."),
         HALF2(2, "Bet on second half (19-36)"),
         COLOR(2, "Red or black"),
@@ -44,11 +44,18 @@ public class RouletteTable {
     }
 
     public static void printBets() {
-        System.out.println("Available Roulette Bets and Payouts:");
         for (BetType bet : BetType.values()) {
-            System.out.println(bet.name() + ": "+ bet.getPayoutMultiplier() + " to 1  " + bet.getDescription() );
+            System.out.println(bet.getPayoutMultiplier() + " to 1:  " + bet.getDescription() );
+            System.out.println();
         }
     }
+
+    public static void printBet(int idx) {
+        System.out.println("Available Roulette Bets and Payouts:");
+        BetType bet = BetType.values()[idx-1];
+        System.out.println(bet.name() + ": "+ bet.getPayoutMultiplier() + " to 1  " + bet.getDescription() );
+    }
+
 
     public static void printRouletteTable() {
         String[][] numbers = {

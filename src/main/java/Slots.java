@@ -6,13 +6,19 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Collections;
 
+
+
 public class Slots extends Games implements Game {
 
     // Reels hold the columns of icons, payouts give the multiplier.
     private final List<List<String>> reels;
     private final Map<String, Integer> payouts;
 
-    // constructor generates a random set of reels each time
+    /**
+     * constructor generates a random set of reels each time
+     * @param players generates player list
+     */
+
     public Slots(ArrayList<Player> players) {
         super(players);
         this.reels = generateReels();
@@ -26,7 +32,6 @@ public class Slots extends Games implements Game {
         List<String> singleReel = Arrays.asList(icons);
         // holds randomized reels
         List<List<String>> reels = new ArrayList<>();
-
         // create randomized reels, then add them to the reel container.
         for (int i = 0; i < 3; i++) {
             Collections.shuffle(singleReel);
@@ -48,7 +53,7 @@ public class Slots extends Games implements Game {
 
 
     // logic for a spin. returns 3 random icons.
-    //TODO: IRL slots use a formula based on last win and bet placed to determine a winner. could incorporate that
+
     public List<String> spinReels() {
         Random random = new Random();
         List<String> result = new ArrayList<>();
@@ -67,24 +72,19 @@ public class Slots extends Games implements Game {
     public void play() {
     //iterate through available players
         for(Player player:players){
-
             boolean currentBet = player.placeBet();
-
-
             //check if bet was placed. if so spin the wheel and check if user has a match.
             // might be able to update for betting on multiple lines.
             if (currentBet) {
-
                 List<String> outcome = spinReels();
                 Integer payoutMulti = 0;
-
                 // Check if there's a match, and payout
-                //TODO: incorporate multi-line betting if time permitting.
-                if (outcome.get(0).equals(outcome.get(1)) && outcome.get(0).equals(outcome.get(2))) {
+                boolean match = outcome.get(0).equals(outcome.get(1)) && outcome.get(0).equals(outcome.get(2)); //legible
+                if (match) {
                     payoutMulti = payouts.get(outcome.get(1));
                     System.out.println(player.getName() + " won " + payoutMulti * player.getBet() + " chips");
                 } else {
-                    System.out.println("L, you lost " + player.getBet() + " chips");
+                    System.out.println("You lost " + player.getBet() + " chips");
                 }
                 player.addChips(payoutMulti * player.getBet());
             }

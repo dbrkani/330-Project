@@ -12,7 +12,7 @@ public class RouletteNum {
 
     public RouletteNum(int num){
         this.num = num;
-        String numString = (num == 37 ? "00" : Integer.toString(num));
+        this.numString = (num == 37 ? "00" : Integer.toString(num));
         this.row = ((num==0||num==37)?0:(int)Math.ceil(num/3.0));
         this.column = (num==0||num==37)?0:(num%3==0?3:num%3);
         this.color = setColor(num);

@@ -2,23 +2,46 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
-//Player holds Player information, including player IDs, names, and bet amounts.
-
-public class Player {
-/*
-Player ID is an atomic integer that increments on every creation of a new player. Using ID allows
-Players to have identical names
-*/
-    private static final AtomicInteger count = new AtomicInteger(0);
-    private final int  playerID;
-    private final String name;
-    private long chips;
-/*
-Bets are tracked by the player class in order easily pull and create bets between games.
+/**
+ * Represents a player in a game. Manages player information - IDs, names, and betting amounts.
+ * Player IDs are unique and automatically increment when a player is created, allowing players to have identical names.
  */
+public class Player {
+    /**
+     * Static counter for generating unique player IDs.
+     */
+    private static final AtomicInteger count = new AtomicInteger(0);
+
+    /**
+     * Unique identifier for the player.
+     */
+    private final int playerID;
+
+    /**
+     * Name of the player.
+     */
+    private final String name;
+
+    /**
+     * Amount of chips the player has for betting.
+     */
+    private long chips;
+
+    /**
+     * List of bet amounts placed by the player.
+     */
     private final ArrayList<Integer> bets;
+
+    /**
+     * Scanner to read player input.
+     */
     private final Scanner scanner;
+
+    /**
+     * Constructs a new player with a specified name. Initial chips are set to 1000.
+     *
+     * @param name the name of the player
+     */
     public Player(String name) {
         this.name = name;
         this.scanner = new Scanner(System.in);
@@ -27,86 +50,129 @@ Bets are tracked by the player class in order easily pull and create bets betwee
         this.bets = new ArrayList<>();
     }
 
-
-/*
-place bet is a conditional that subtracts an amount from players available chips and adds it to the bet pool if available
-returns true if successful.
-
-Place bet is overloaded twice. Original takes user input for the bet, first overload allows for adding another bet
-to the using the original bet amount, and second overload updates a bet based on ID
- */
+    /**
+     * Places a bet by taking an amount input from the player.
+     * Amount is subtracted from the player's chips and added to their bet pool if they have enough chips.
+     *
+     * @return true if the bet is successfully placed, false otherwise.
+     */
     public boolean placeBet() {
-        System.out.print("Player:" +getName()+"\nChips: "+getChips()+"\n\nEnter bet amount: ");
+        System.out.print("Player: " + getName() + "\nChips: " + getChips() + "\n\nEnter bet amount: ");
         int amount = scanner.nextInt();
-        if (chips >= amount && amount>0) {
-            chips -=amount;
+        if (chips >= amount && amount > 0) {
+            chips -= amount;
             bets.add(amount);
-            System.out.println("Bet placed: " + bets);
-            System.out.println();
-            return true;
-        } else {
-            System.out.println("Not enough money");
-            System.out.println();
-            return false;
-        }
-
-    }
-    public boolean placeBet(long amount) {
-        if (chips >= amount) {
-            chips -=amount;
             System.out.println("Bet placed: " + amount);
             System.out.println();
-            bets.add((int) amount);
             return true;
-
         } else {
             System.out.println("Not enough money");
             System.out.println();
             return false;
         }
-
     }
 
+    /**
+     * Places specified bet amount directly, updating the player's chips and bet pool.
+     *
+     * @param amount the amount of the bet
+     * @return true if the bet is successfully placed, false otherwise.
+     */
+    public boolean placeBet(long amount) {
+        if (chips >= amount) {
+            chips -= amount;
+            bets.add((int) amount);
+            System.out.println("Bet placed: " + amount);
+            System.out.println();
+            return true;
+        } else {
+            System.out.println("Not enough money");
+            System.out.println();
+            return false;
+        }
+    }
+
+    /**
+     * Updates an existing bet by index with an additional amount.
+     *
+     * @param index  the index of the bet to update
+     * @param amount the additional amount to add to the bet
+     * @return true if the bet is successfully updated, false otherwise.
+     */
     public boolean placeBet(int index, long amount) {
-        if (chips >= amount && amount>0) {
-            chips -=amount;
-            bets.set(index, (int) (bets.get(index)+amount));
+        if (chips >= amount && amount > 0 && index >= 0 && index < bets.size()) {
+            chips -= amount;
+            bets.set(index, (int) (bets.get(index) + amount));
             System.out.println("Bet updated: " + bets.get(index));
             System.out.println();
             return true;
-
         } else {
             System.out.println("Not enough money");
             return false;
         }
-
     }
 
-    //getters and setters for bets for player variables.
+    // Additional methods for managing chips and bets are documented below.
 
+    /**
+     * Adds a specified amount of chips to the player's total.
+     *
+     * @param amount the amount of chips to add
+     */
     public void addChips(int amount) {
         chips += amount;
     }
 
-    public int getBet(){
+    /**
+     * Retrieves the first bet in the list.
+     *
+     * @return the first bet amount
+     */
+    public int getBet() {
         return bets.getFirst();
     }
 
-    public long getBet(int index){
+    /**
+     * Retrieves a bet by index.
+     *
+     * @param index the index of the bet to retrieve
+     * @return the bet amount at the index
+     */
+    public long getBet(int index) {
         return bets.get(index);
     }
-    public void resetBets(){
+
+    /**
+     * Clears all bets from the player's bet list.
+     */
+    public void resetBets() {
         bets.clear();
     }
 
+    /**
+     * Returns the total number of chips the player has.
+     *
+     * @return the total chips
+     */
     public long getChips() {
         return chips;
     }
 
+    /**
+     * Returns the name of the player.
+     *
+     * @return the player's name
+     */
     public String getName() {
         return name;
     }
-    public int getID(){
+
+    /**
+     * Returns the unique ID of the player.
+     *
+     * @return the player ID
+     */
+    public int getID() {
         return playerID;
     }
 }

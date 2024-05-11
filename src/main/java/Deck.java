@@ -10,7 +10,7 @@ public class Deck {
         this.cards = new ArrayList<>();
         this.numDecks = 1;
         initializeDeck();
-        shuffle();
+
     }
 //different games use different numbers of decks. number of decks parameter is good future proofing for new games
     public Deck(int numDecks) {
@@ -18,7 +18,6 @@ public class Deck {
         this.numDecks = numDecks;
         for (int i = 0; i < this.numDecks; i++)
             initializeDeck();
-        shuffle();
     }
 
     private void initializeDeck() {
@@ -31,26 +30,17 @@ public class Deck {
                 this.cards.add(new Card(rank, suit));
             }
         }
-    }
-
- //TODO: shuffle should be refactored and incorporated into dealcard
-// reinitialize deck if
-    public void shuffle() {
-        if(cards.size() < (numDecks*52*.3)){
-            cards.clear();
-            for (int i = 0; i <numDecks;i++)
-                initializeDeck();
-        }
-
         Collections.shuffle(this.cards);
     }
 
 
     // remove the first card in a deck, then return it
     public Card dealCard() {
-        if (!this.cards.isEmpty()) {
-            return this.cards.removeFirst();
+        //if theres less than a third of cards remaining, create a new deck
+        if (cards.size() < (numDecks*52*.3)) {
+            cards.clear();
+            initializeDeck();
         }
-        return null;
+        return this.cards.removeFirst();
     }
 }
